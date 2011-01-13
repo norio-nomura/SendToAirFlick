@@ -11,9 +11,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.0.1</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.0.1</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
@@ -53,7 +53,7 @@
 		</dict>
 	</dict>
 	<key>Update Manifest URL</key>
-	<string>http://norio-nomura.github.com/SendUstreamToAirFlick/</string>
+	<string>http://norio-nomura.github.com/SendUstreamToAirFlick/Manifest.plist</string>
 	<key>Website</key>
 	<string>http://norio-nomura.github.com/SendUstreamToAirFlick/</string>
 </dict>
