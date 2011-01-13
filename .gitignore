@@ -1,0 +1,8 @@
+*.crx
+*.esproj
+*.pem
+*.safariextz
+*.zip
+.DS_Store
+.idea
+downloads
