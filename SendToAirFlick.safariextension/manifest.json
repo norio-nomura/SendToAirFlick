@@ -1,0 +1,17 @@
+{
+    "name":"SendToAirFlick",
+    "version":"1.0",
+    "description":"Send url to AirFlick",
+    "icons":{
+        "16":"Icon-16.png",
+        "48":"Icon-48.png",
+        "128":"Icon-128.png"
+    },
+    "content_scripts": [
+      {
+        "matches": ["*://*/*"],
+        "js": ["SendToAirFlick.js"],
+        "run_at": "document_start"
+      }
+    ]
+}
