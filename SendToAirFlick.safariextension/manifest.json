@@ -1,6 +1,6 @@
 {
     "name":"SendToAirFlick",
-    "version":"1.0",
+    "version":"1.1",
     "description":"Send url to AirFlick",
     "icons":{
         "16":"Icon-16.png",
