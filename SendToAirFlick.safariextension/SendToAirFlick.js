@@ -26,8 +26,11 @@ THE SOFTWARE.
 
 if (window.top === window) {
   window.document.addEventListener('beforeload', function(event) {
-    var re = /^https?:\/\/.*(.mov|.mp4|.m4v|.mp3|.m4a|.m3u8)(\?.*)?$/i;
-      if (re.test(event.url) && event.target.parentNode.tagName !=='OBJECT') {
+    if (event.url) {
+      var maybeMedia = /^https?:\/\/.*(.mov|.mp4|.m4v|.mp3|.m4a|.m3u8)(\?.*)?$/i,
+          maybePicture = /^https?:\/\/.*(.png|.gif|.jpg|.svg)(\?.*)?$/i;
+      if (maybeMedia.test(event.url) && event.target.parentNode.tagName !== 'OBJECT' ||
+          !maybePicture.test(event.url) && event.target.tagName === 'VIDEO') {
         var a = window.document.createElement('a');
         a.id = 'sendUstreamToAirFlick';
         a.className = 'sendUstreamToAirFlick';
@@ -43,5 +46,6 @@ if (window.top === window) {
         a.addEventListener('mouseout', function() {a.style.color = 'transparent';}, false);
         window.setTimeout(function(){try{a.style.color = 'transparent';}catch(e){};}, 5000);
       }
+    }
   }, true);
 }
