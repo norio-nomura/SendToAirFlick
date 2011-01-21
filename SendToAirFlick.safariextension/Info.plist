@@ -20,6 +20,10 @@
 	<dict>
 		<key>Scripts</key>
 		<dict>
+			<key>End</key>
+			<array>
+				<string>injectToContent.js</string>
+			</array>
 			<key>Start</key>
 			<array>
 				<string>SendToAirFlick.js</string>

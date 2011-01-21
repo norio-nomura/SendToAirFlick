@@ -1,17 +1,27 @@
 {
-    "name":"SendToAirFlick",
-    "version":"1.1",
-    "description":"Send url to AirFlick",
-    "icons":{
-        "16":"Icon-16.png",
-        "48":"Icon-48.png",
-        "128":"Icon-128.png"
+  "name":"SendToAirFlick",
+  "version":"1.1",
+  "description":"Send url to AirFlick",
+  "icons":{
+    "16":"Icon-16.png",
+    "48":"Icon-48.png",
+    "128":"Icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["SendToAirFlick.js"],
+      "run_at": "document_start"
     },
-    "content_scripts": [
-      {
-        "matches": ["*://*/*"],
-        "js": ["SendToAirFlick.js"],
-        "run_at": "document_start"
-      }
-    ]
+    {
+      "matches":[
+        "http://www.ustream.tv/channel/*",
+        "http://www.ustream.tv/recorded/*"
+      ],
+      "js":[
+        "injectToContent.js"
+      ],
+      "run_at":"document_end"
+    }
+  ]
 }
