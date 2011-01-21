@@ -1,0 +1,22 @@
+{
+    "name":"SendUstreamToAirFlick",
+    "version":"1.0",
+    "description":"Send Ustream to AirFlick",
+    "icons":{
+        "16":"Icon-16.png",
+        "48":"Icon-48.png",
+        "128":"Icon-128.png"
+    },
+    "content_scripts":[
+        {
+            "matches":[
+                "http://www.ustream.tv/channel/*",
+                "http://www.ustream.tv/recorded/*"
+            ],
+            "js":[
+                "injectToContent.js"
+            ],
+            "run_at":"document_end"
+        }
+    ]
+}
