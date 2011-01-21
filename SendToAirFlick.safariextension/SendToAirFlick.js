@@ -32,8 +32,8 @@ if (window.top === window) {
       if (maybeMedia.test(event.url) && event.target.parentNode.tagName !== 'OBJECT' ||
           !maybePicture.test(event.url) && event.target.tagName === 'VIDEO') {
         var a = window.document.createElement('a');
-        a.id = 'sendUstreamToAirFlick';
-        a.className = 'sendUstreamToAirFlick';
+        a.id = 'sendToAirFlick';
+        a.className = 'sendToAirFlick';
         a.textContent = 'send to AirFlick!';
         a.style.float = 'right';
         a.style.position = 'relative';

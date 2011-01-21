@@ -14,13 +14,8 @@
       "run_at": "document_start"
     },
     {
-      "matches":[
-        "http://www.ustream.tv/channel/*",
-        "http://www.ustream.tv/recorded/*"
-      ],
-      "js":[
-        "injectToContent.js"
-      ],
+      "matches": ["*://*/*"],
+      "js":["injectToContent.js"],
       "run_at":"document_end"
     }
   ]

@@ -2,7 +2,7 @@
 
 The MIT License
 
-Copyright (c) 2010 Norio Nomura
+Copyright (c) 2011 Norio Nomura
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the 'Software'), to deal
@@ -26,11 +26,22 @@ THE SOFTWARE.
 
 if (window.top === window) {
   (function () {
-    var getExtensionURL = typeof(safari) !== 'undefined' ?
+    var contentScripts = [
+          {
+            matcher: /^https?:\/\/www\.ustream\.tv\/(?:channel|recorded)\/.*/i,
+            file: 'sendUstreamToAirFlick.js'
+          }
+        ],
+        getExtensionURL = typeof(safari) !== 'undefined' ?
         function (fileName) {return safari.extension.baseURI + fileName;} :
         typeof(chrome) !== 'undefined' ? chrome.extension.getURL : null;
-    var script = window.document.createElement('script');
-    script.src = getExtensionURL('sendUstreamToAirFlick.js') + '?datetime=' + Date.now();
-    window.document.head.appendChild(script);
+
+    contentScripts.forEach(function (contentScript) {
+      if (contentScript.matcher.test(window.location) {
+        var script = window.document.createElement('script');
+        script.src = getExtensionURL(contentScript.file) + '?datetime=' + Date.now();
+        window.document.head.appendChild(script);
+      }
+    });
   })();
 }
