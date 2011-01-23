@@ -15,8 +15,9 @@
     },
     {
       "matches": ["*://*/*"],
-      "js":["injectToContent.js"],
-      "run_at":"document_end"
+      "js": ["InjectToContent.js"],
+      "run_at": "document_end",
+      "all_frames": true
     }
   ]
 }

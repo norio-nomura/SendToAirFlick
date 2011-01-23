@@ -24,24 +24,33 @@ THE SOFTWARE.
 
 */
 
-if (window.top === window) {
-  (function () {
-    var contentScripts = [
-          {
-            matcher: /^https?:\/\/www\.ustream\.tv\/(?:channel|recorded)\/.*/i,
-            file: 'sendUstreamToAirFlick.js'
-          }
-        ],
-        getExtensionURL = typeof(safari) !== 'undefined' ?
-        function (fileName) {return safari.extension.baseURI + fileName;} :
-        typeof(chrome) !== 'undefined' ? chrome.extension.getURL : null;
+(function () {
+  var contentScripts = window.top === window ?
+      [
+        {
+          matcher: /^https?:\/\/www\.ustream\.tv\/(?:channel|recorded)\/.*/i,
+          file: 'sendUstreamToAirFlick.js'
+        },
+        {
+          matcher: /^https?:\/\/vimeo\.com\/.*/i,
+          file: 'SendVimeoToAirFlick.js'
+        }
+      ] :
+      [
+        {
+          matcher: /^https?:\/\/av\.vimeo\.com\/.*/i,
+          file: 'SendVimeoToAirFlick.js'
+        }
+      ],
+      getExtensionURL = typeof(safari) !== 'undefined' ?
+      function (fileName) {return safari.extension.baseURI + fileName;} :
+      typeof(chrome) !== 'undefined' ? chrome.extension.getURL : null;
 
-    contentScripts.forEach(function (contentScript) {
-      if (contentScript.matcher.test(window.location) {
-        var script = window.document.createElement('script');
-        script.src = getExtensionURL(contentScript.file) + '?datetime=' + Date.now();
-        window.document.head.appendChild(script);
-      }
-    });
-  })();
-}
+  contentScripts.forEach(function (contentScript) {
+    if (contentScript.matcher.test(window.location)) {
+      var script = window.document.createElement('script');
+      script.src = getExtensionURL(contentScript.file) + '?datetime=' + Date.now();
+      (window.document.head || window.document.body).appendChild(script);
+    }
+  });
+})();
