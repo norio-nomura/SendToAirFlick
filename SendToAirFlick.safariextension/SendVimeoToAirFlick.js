@@ -26,58 +26,66 @@ THE SOFTWARE.
 
 if (window.top === window) {
   (function () {
-    var isPlayer = /^player\d+_\d+$/i,
-        isPlayerElement = /^player\d+_\d+_element$/i,
-        player = null,
-        playerElement = null;
-    for (var i in window) {
-      if (isPlayer.test(i)) {
-        player = window[i];
-      } else if (isPlayerElement.test(i)) {
-        playerElement = window[i];
+    var getVideoUrl = function (player) {
+          var a = player.config, c = 'h264', g = null;
+          if (((new Date).getTime() / 1E3).round() - player.loadedTime > 3540) {
+            a.request = (new XHR).getWithCredentials("http://" + a.request.player_url + "/config/" + a.video.id).request
+          }
+          if (c) {
+            g = "http://" + a.request.player_url + "/play_redirect";
+            g += "?quality=hd";
+            g += "&codecs=" + c;
+            g += "&clip_id=" + a.video.id;
+            g += "&time=" + a.request.timestamp;
+            g += "&sig=" + a.request.signature;
+            g += "&type=html5_desktop_" + (a.embed.on_site ? "local" : "embed")
+          }
+          return g;
+        },
+        onclick = function (event) {
+          var vimeoHolders = event.target.parentNode.getElementsByClassName('vimeo_holder');
+          if (vimeoHolders.length) {
+            var players = vimeoHolders[0].getElementsByClassName('player');
+            if (players.length) {
+              var player = window[players[0].id.replace(/^player_/i, 'player')];
+              if (player) {
+                var iframe = window.document.getElementById('sendVimeoToAirFlickIframe') || window.document.createElement('iframe');
+                iframe.id = 'sendVimeoToAirFlickIframe';
+                iframe.height = '0';
+                iframe.width = '0';
+                iframe.style.visibility = 'hidden';
+                iframe.src = getVideoUrl(player);
+                window.document.body.appendChild(iframe);
+              }
+            }
+          }
+        },
+        createA = function (element) {
+          var a = window.document.createElement('a');
+          a.className = 'sendVimeoToAirFlick';
+          a.textContent = 'send to AirFlick!';
+          a.style.float = 'right';
+          a.style.position = 'relative';
+          a.style.marginLeft = '20px';
+          a.style.marginRight = '20px';
+          a.style.zIndex = '1001';
+          a.onclick = onclick;
+          element.parentNode.insertBefore(a, element.nextSibling);
+          return a;
+        },
+        vimeoHolders = window.document.getElementsByClassName('vimeo_holder'),
+        clip = window.document.getElementById('clip');
+    if (vimeoHolders) {
+      for (var i = 0; i < vimeoHolders.length; i++) {
+        createA(vimeoHolders[i]);
       }
     }
-    if (player && playerElement) {
-      var getVideoUrl = function (b) {
-            b = 'hd';
-            var a = this.config, c = 'h264', g = null;
-            if (((new Date).getTime() / 1E3).round() - this.loadedTime > 3540) {
-              a.request = (new XHR).getWithCredentials("http://" + a.request.player_url + "/config/" + a.video.id).request
-            }
-            if (c) {
-              g = "http://" + a.request.player_url + "/play_redirect";
-              g += "?quality=" + b;
-              g += "&codecs=" + c;
-              g += "&clip_id=" + a.video.id;
-              g += "&time=" + a.request.timestamp;
-              g += "&sig=" + a.request.signature;
-              g += "&type=html5_desktop_" + (a.embed.on_site ? "local" : "embed")
-            }
-            return g;
-          },
-          button = window.document.createElement('a');
-      button.id = 'sendVimeoToAirFlick';
-      button.className = 'sendVimeoToAirFlick';
-      button.textContent = 'send to AirFlick!';
-      button.style.float = 'right';
-      button.style.position = 'relative';
-      button.style.marginRight = '20px';
-      button.style.zIndex = '1001';
-      playerElement.parentNode.parentNode.appendChild(button);
-      button.addEventListener('click', function (event) {
-        var iframe = window.document.getElementById('sendVimeoToAirFlickIframe') || window.document.createElement('iframe');
-        iframe.id = 'sendVimeoToAirFlickIframe';
-        iframe.height = '0';
-        iframe.width = '0';
-        iframe.style.visibility = 'hidden';
-        iframe.src = getVideoUrl.call(player, 'hd');
-        window.document.body.appendChild(iframe);
-      }, false);
+    if (clip) {
+        createA(clip);
     }
   })();
 } else {
   (function () {
-    debugger;
     var mediaElement = window.document.body.children[0];
     if (mediaElement.tagName === 'VIDEO' || mediaElement.tagName === 'EMBED') {
       var src = 'airflick://play-media?MediaLocation='+encodeURIComponent(mediaElement.src);
