@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!--
+
+The MIT License
+
+Copyright (c) 2010-2011 Norio Nomura
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+-->
+<html>
+<head>
+<title>SendToAirFlick</title>
+<script src="options.js"></script>
+<script type="text/javascript">
+
+function save_options() {
+    for (var i in options) {
+        var element = document.getElementById(i);
+        switch (element.type) {
+            case 'checkbox':
+            case 'radio':
+                localStorage[i] = element.checked;
+                options[i] = element.checked;
+                break;
+            default:
+                localStorage[i] = element.value;
+                options[i] = element.value;
+        };
+    }
+}
+
+function restore_options() {
+    for (var i in options) {
+        var element = document.getElementById(i);
+        switch (element.type) {
+            case 'checkbox':
+            case 'radio':
+                element.checked = ((localStorage[i] || options[i]) === 'true');
+                options[i] = element.checked;
+                break;
+            default:
+                element.value = (localStorage[i] != null ? localStorage[i] : options[i]);
+                options[i] = element.value;
+        };
+        element.addEventListener("change", save_options, false);
+    }
+}
+
+</script>
+<style>
+body {
+    width: 464px;
+}
+
+option {
+    width: 100%;
+}
+
+.extension-settings {
+    width: 100%;
+    border-spacing: 0;
+}
+
+.extension-settings tr > * {
+    padding: 5px 3px;
+}
+
+.extension-settings th {
+    width: 125px;
+    white-space: nowrap;
+    vertical-align: top;
+    line-height: 26px;
+}
+
+.extension-settings tr.group > th {
+    padding-left: 64px;
+    text-align: left;
+    padding-top: 18px;
+    padding-bottom: 0;
+    color: rgb(64, 64, 64);
+    font-size: 13px;
+    font-weight: bold;
+    line-height: normal;
+}
+
+.extension-settings > tr:first-child > * {
+    padding-top: 0 !important;
+}
+
+.extension-settings input[type="range"], .extension-settings select {
+    margin: 0;
+    vertical-align: middle;
+}
+
+.extension-settings input {
+    margin-left: 0;
+}
+
+.extension-settings select, .extension-settings input {
+    min-width: 60px;
+}
+
+.extension-settings select, .extension-settings input[type="text"], .extension-settings input[type="password"], .extension-settings input[type="range"] {
+    width: 100%;
+}
+
+.extension-settings tr:not(.group) > th {
+    text-align: right;
+    font-weight: normal;
+}
+
+.extension-settings tr:not(.group) > th:not(:empty):after {
+    content: ":";
+}
+
+.extension-settings tr.check-box:not(.anchored), .extension-settings tr.button:not(.anchored) {
+    text-align: center;
+}
+
+
+</style>
+</head>
+<body onload="restore_options()">
+<table class="extension-settings">
+<tr class="check-box">
+<td colspan="2">
+<label>
+<input type="checkbox" id="UseAirFlick" value="false">
+Use AirFlick. (If use AirFlick, below options are ignored.)</label>
+</select>
+</td>
+</tr>
+<tr>
+<th>
+Name of Apple TV (default: appletv.local.)
+</th>
+<td>
+<input type="text" id="NameOfAppleTV" value="false">
+</select>
+</td>
+</tr>
+</body>
+</html>

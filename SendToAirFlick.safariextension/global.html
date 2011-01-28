@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--
+
+The MIT License
+
+Copyright (c) 2011 Norio Nomura
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+-->
+<html>
+<head>
+<script src="options.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+var settings = typeof(safari) != 'undefined' ? safari.extension.settings : localStorage;
+var handlers = {};
+
+handlers['SendToAirPlay'] = function (src, response) {
+  var isHttp = /^https?:/i;
+  if (settings.UseAirFlick !== 'false'||!isHttp.test(src)) {
+    response(src);
+  } else {
+    var xhr = new XMLHttpRequest;
+    xhr.open('POST', 'http://' + settings.NameOfAppleTV + ':7000/play');
+    xhr.send('Content-Location: ' + src + '\nStart-Position: 0.0000\n');
+  }
+};
+
+function handleMessageEvent(messageEvent) {
+  var handler = handlers[messageEvent.name];
+  if(handler) {
+    handler(messageEvent.message, function (message) {
+      messageEvent.target.page.dispatchMessage(messageEvent.name, message);
+    });
+  }
+}
+
+function handleConnect(port) {
+  var handler = handlers[port.name];
+  if(handler) {
+    port.onMessage.addListener(function (message) {
+      handler(message, function (message) {port.postMessage(message);});
+    });
+  }
+} 
+
+if (typeof(safari) !== 'undefined') {
+  safari.application.addEventListener('message', handleMessageEvent, false);
+} else if (typeof(chrome) !== 'undefined') {
+  for (var i in options) {
+    settings[i] = settings[i] || options[i];
+  }
+  chrome.extension.onConnect.addListener(handleConnect);
+}
+
+</script>
+</head>
+<body>
+</body>
+</html>

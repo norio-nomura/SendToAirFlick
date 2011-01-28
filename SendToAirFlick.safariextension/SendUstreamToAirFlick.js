@@ -38,7 +38,11 @@ if (window.top === window) {
           button.style.position = 'relative';
           button.style.marginRight = '20px';
           button.style.zIndex = '1001';
-          button.href = 'airflick://play-media?MediaLocation='+encodeURIComponent(window.ustream.vars.liveHttpUrl);
+          button.onclick = function () {
+            var evt = window.document.createEvent('CustomEvent');
+            evt.initCustomEvent('SendToAirPlay', false, false, window.ustream.vars.liveHttpUrl);
+            window.document.dispatchEvent(evt);
+          };
           channelFlashContent.parentNode.parentNode.insertBefore(button, channelFlashContent.parentNode.nextSibling);
         }
       }

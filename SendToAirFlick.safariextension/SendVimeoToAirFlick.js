@@ -88,9 +88,12 @@ if (window.top === window) {
   (function () {
     var mediaElement = window.document.body.children[0];
     if (mediaElement.tagName === 'VIDEO' || mediaElement.tagName === 'EMBED') {
-      var src = 'airflick://play-media?MediaLocation='+encodeURIComponent(mediaElement.src);
+      var evt = window.document.createEvent('CustomEvent');
+      evt.initCustomEvent('SendToAirPlay', false, false, mediaElement.src);
+      window.document.dispatchEvent(evt);
       window.document.body.removeChild(mediaElement);
-      window.location = src;
+    } else {
+      console.log('SendVimeoToAirFlick: Sorry, I can not send video.');
     }
   })();
 }

@@ -41,7 +41,11 @@ if (window.top === window) {
         a.style.marginRight = '20px';
         a.style.webkitTransitionDuration = '0.3s';
         a.style.zIndex = '1001';
-        a.href = 'airflick://play-media?MediaLocation='+encodeURIComponent(event.url);
+        a.onclick = function () {
+          var evt = window.document.createEvent('CustomEvent');
+          evt.initCustomEvent('SendToAirPlay', false, false, event.url);
+          window.document.dispatchEvent(evt);
+        };
         event.target.parentNode.appendChild(a);
         a.addEventListener('mouseover', function() {a.style.removeProperty('color');}, false);
         a.addEventListener('mouseout', function() {a.style.color = 'transparent';}, false);
