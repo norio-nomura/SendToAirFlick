@@ -28,9 +28,10 @@ if (window.top === window) {
   window.document.addEventListener('beforeload', function(event) {
     if (event.url) {
       var maybeMedia = /^https?:\/\/.*(.mov|.mp4|.m4v|.mp3|.m4a|.m3u8)(\?.*)?$/i,
-          maybePicture = /^https?:\/\/.*(.png|.gif|.jpg|.svg)(\?.*)?$/i;
+          maybePicture = /^https?:\/\/.*(.png|.gif|.jpg|.svg)(\?.*)?$/i,
+          isHttp = /^https?:\/\//i;
       if (maybeMedia.test(event.url) && event.target.parentNode.tagName !== 'OBJECT' ||
-          !maybePicture.test(event.url) && event.target.tagName === 'VIDEO') {
+          !maybePicture.test(event.url) && isHttp.test(event.url) &&  event.target.tagName === 'VIDEO') {
         var a = window.document.createElement('a');
         a.id = 'sendToAirFlick';
         a.className = 'sendToAirFlick';
