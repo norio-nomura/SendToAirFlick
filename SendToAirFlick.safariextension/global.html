@@ -26,11 +26,15 @@ THE SOFTWARE.
 -->
 <html>
 <head>
+<script src="TiffFromCanvasRenderingContext2D.js" type="text/javascript"></script>
 <script src="options.js" type="text/javascript"></script>
 <script type="text/javascript">
 
-var settings = typeof(safari) != 'undefined' ? safari.extension.settings : localStorage;
-var handlers = {};
+var settings = typeof(safari) !== 'undefined' ? safari.extension.settings : localStorage,
+    getBackgroundPage = typeof(safari) !== 'undefined' ?
+    function () {return safari.extension.globalPage.contentWindow;} :
+    typeof(chrome) !== 'undefined' ? chrome.extension.getBackgroundPage : null,
+    handlers = {};
 
 handlers['SendToAirPlay'] = function (src, response) {
   var isHttp = /^https?:/i;
@@ -68,6 +72,57 @@ if (typeof(safari) !== 'undefined') {
     settings[i] = settings[i] || options[i];
   }
   chrome.extension.onConnect.addListener(handleConnect);
+}
+
+if (TiffFromCanvasRenderingContext2D) {
+  var sendImgToAirPlay = function (info) {
+    var window = getBackgroundPage(),
+        photo = window.document.getElementById('photo') || window.document.createElement('img');
+    photo.id = 'photo';
+    photo.src = info.srcUrl;
+    photo.style.height = 'auto';
+    photo.style.width = 'auto';
+    photo.onload = function (event) {
+      var renderer = window.document.getElementById('renderer') || window.document.createElement('canvas');
+      renderer.width = photo.width;
+      renderer.height = photo.height;
+      window.document.body.appendChild(renderer);
+      var context = renderer.getContext('2d');
+      context.drawImage(photo, 0, 0);
+      var xhr = new XMLHttpRequest;
+      xhr.open('PUT', 'http://' + settings.NameOfAppleTV + ':7000/photo');
+      xhr.setRequestHeader('X-Apple-Transition', 'SlideLeft');
+      var blob = TiffFromCanvasRenderingContext2D.GetBlob(context);
+      xhr.send(blob);
+      window.document.body.removeChild(photo);
+    }
+    window.document.body.appendChild(photo);
+  };
+  if (typeof(safari) !== 'undefined') {
+    safari.application.addEventListener("command", function (event) {
+      sendImgToAirPlay(event.userInfo);
+    }, false);
+    safari.application.addEventListener("contextmenu", function (event) {
+      if (event.userInfo && event.userInfo.nodeName === "IMG") {
+        event.contextMenu.appendContextMenuItem("SendToAirPlay", "send image to AirPlay!");
+      }
+    }, true);
+  } else if (typeof(chrome) !== 'undefined') {
+    chrome.contextMenus.create({
+      'title': 'send image to AirPlay!',
+      'contexts':['image'],
+      'onclick': function (info, tab) {
+        sendImgToAirPlay(info);
+      },
+      'documentUrlPatterns':[
+        '*://*/*'
+      ],
+      'targetUrlPatterns': [
+        '*://*/*.jpg',
+        '*://*/*.png'
+      ]
+    }, function () {});
+  }
 }
 
 </script>

@@ -50,6 +50,12 @@ if (window.top === window) {
         a.addEventListener('mouseover', function() {a.style.removeProperty('color');}, false);
         a.addEventListener('mouseout', function() {a.style.color = 'transparent';}, false);
         window.setTimeout(function(){try{a.style.color = 'transparent';}catch(e){};}, 5000);
+      } else if (maybePicture.test(event.url)) {
+        event.target.addEventListener("contextmenu", function (event) {
+          safari.self.tab.setContextMenuEventUserInfo(event, {
+            nodeName: event.target.nodeName, srcUrl: event.target.src
+          });
+        }, true);
       }
     }
   }, true);
