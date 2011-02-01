@@ -4,15 +4,15 @@
 <array>
 	<dict>
 		<key>DefaultValue</key>
-		<false/>
+		<string>false</string>
 		<key>FalseValue</key>
-		<false/>
+		<string>false</string>
 		<key>Key</key>
 		<string>UseAirFlick</string>
 		<key>Title</key>
 		<string>Use AirFlick. (If use AirFlick, below options are ignored.)</string>
 		<key>TrueValue</key>
-		<true/>
+		<string>true</string>
 		<key>Type</key>
 		<string>CheckBox</string>
 	</dict>
