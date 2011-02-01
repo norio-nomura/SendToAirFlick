@@ -118,8 +118,14 @@ if (TiffFromCanvasRenderingContext2D) {
         '*://*/*'
       ],
       'targetUrlPatterns': [
+        '*://*/*.png?*',
+        '*://*/*.gif?*',
+        '*://*/*.jpg?*',
+        '*://*/*.svg?*',
+        '*://*/*.png',
+        '*://*/*.gif',
         '*://*/*.jpg',
-        '*://*/*.png'
+        '*://*/*.svg'
       ]
     }, function () {});
   }
