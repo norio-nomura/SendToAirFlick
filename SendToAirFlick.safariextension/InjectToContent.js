@@ -62,6 +62,10 @@ THE SOFTWARE.
           file: 'SendVimeoToAirFlick.js'
         },
         {
+          matcher: /^https?:\/\/www\.livestation\.com\/channels\/.*/i,
+          file: 'SendLivestationToAirFlick.js'
+        },
+        {
           matcher: /^https?:\/\/www\.livestream\.com\/.*/i,
           file: 'SendLivestreamToAirFlick.js'
         }
