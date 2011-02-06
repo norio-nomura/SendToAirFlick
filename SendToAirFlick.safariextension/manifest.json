@@ -11,12 +11,12 @@
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "js": ["SendToAirFlick.js"],
+      "js": ["ContentsStart.js"],
       "run_at": "document_start"
     },
     {
       "matches": ["*://*/*"],
-      "js": ["InjectToContent.js"],
+      "js": ["ContentsEnd.js"],
       "run_at": "document_end",
       "all_frames": true
     }
