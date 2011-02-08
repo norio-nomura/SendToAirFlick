@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 */
 
-if (window.BlobBuilder && window.ArrayBuffer && Uint8Array) {
+if (window.BlobBuilder && window.ArrayBuffer && window.Uint8Array) {
   
   var TiffFromCanvasRenderingContext2D = function () {
     if (arguments.length) {
@@ -184,11 +184,11 @@ if (window.BlobBuilder && window.ArrayBuffer && Uint8Array) {
       default:
         console.log('unsupported type!');
         debugger;
-      }
+      };
       if (values.byteLength > 4) {
         extras.push(values);
         bb.append(NetworkLongsFromNumbers(offset));
-        offset += values.byteLength
+        offset += values.byteLength;
       } else {
         bb.append(values);
         var padLen = 4 - values.byteLength;
@@ -208,4 +208,4 @@ if (window.BlobBuilder && window.ArrayBuffer && Uint8Array) {
     TiffFromCanvasRenderingContext2D.prototype.init.apply(tiff, arguments);
     return tiff.getBlob();
   };
-}  // window.BlobBuilder && window.ArrayBuffer && Uint8Array
+}  // window.BlobBuilder && window.ArrayBuffer && window.Uint8Array
