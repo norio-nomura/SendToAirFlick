@@ -31,25 +31,24 @@ THE SOFTWARE.
           window.location = 'airflick://play-media?MediaLocation='+encodeURIComponent(message);
         }
       },
-      sendObjectToGlobal;
+      port, 
+      sendMessage = typeof(safari) !== 'undefined' ?
+        function (name, obj) {safari.self.tab.dispatchMessage(name, obj);} :
+        typeof(chrome) !== 'undefined' ?
+        function (name, obj) {
+          if (!port) {
+            port = chrome.extension.connect({'name': name});
+            port.onMessage.addListener(getObjectFromGlobal);
+          }
+          port.postMessage(obj);
+        } : null,
+      sendToAirPlay = function (obj) {sendMessage('SendToAirPlay', obj);};
   if (typeof(safari) !== 'undefined') {
-    sendObjectToGlobal = function (obj) {
-      safari.self.tab.dispatchMessage('SendToAirPlay', obj);
-    };
     safari.self.addEventListener('message', function (eventMessage) {
       getObjectFromGlobal.call(eventMessage, eventMessage.message);
     }, false);
-  } else if (typeof(chrome) !== 'undefined') {
-    var port;
-    sendObjectToGlobal = function (obj) {
-      if (!port) {
-        port = chrome.extension.connect({'name': 'SendToAirPlay'});
-        port.onMessage.addListener(getObjectFromGlobal);
-      }
-      port.postMessage(obj);
-    };
   }
-  window.document.addEventListener('SendToAirPlay', function (evt) {sendObjectToGlobal(evt.detail);}, true);
+  window.document.addEventListener('SendToAirPlay', function (evt) {sendToAirPlay(evt.detail);}, true);
 
   var contentScripts = window.top === window ?
       [

@@ -25,40 +25,50 @@ THE SOFTWARE.
 */
 
 if (window.top === window) {
-  window.document.addEventListener('beforeload', function(event) {
-    if (event.url) {
-      var maybeMedia = /^https?:\/\/.*(.mov|.mp4|.m4v|.mp3|.m4a|.m3u8)(\?.*)?$/i,
-          maybePicture = /^https?:\/\/.*(.png|.gif|.jpg|.svg)(\?.*)?$/i,
-          isHttp = /^https?:\/\//i;
-      if (maybeMedia.test(event.url) && event.target.parentNode.tagName !== 'OBJECT' ||
-          !maybePicture.test(event.url) && isHttp.test(event.url) &&  event.target.tagName === 'VIDEO') {
-        var a = window.document.createElement('a');
-        a.id = 'sendToAirFlick';
-        a.className = 'sendToAirFlick';
-        a.textContent = 'send to AirFlick!';
-        a.style.float = 'right';
-        a.style.position = 'relative';
-        a.style.marginRight = '20px';
-        a.style.webkitTransitionDuration = '0.3s';
-        a.style.zIndex = '1001';
-        a.onclick = function () {
-          var evt = window.document.createEvent('CustomEvent');
-          evt.initCustomEvent('SendToAirPlay', false, false, event.url);
-          window.document.dispatchEvent(evt);
-        };
-        event.target.parentNode.appendChild(a);
-        a.addEventListener('mouseover', function() {a.style.removeProperty('color');}, false);
-        a.addEventListener('mouseout', function() {a.style.color = 'transparent';}, false);
-        window.setTimeout(function(){try{a.style.color = 'transparent';}catch(e){};}, 5000);
-      } else if (maybePicture.test(event.url)) {
-        if (typeof(safari) !== 'undefined') {
-          event.target.addEventListener("contextmenu", function (event) {
-            safari.self.tab.setContextMenuEventUserInfo(event, {
-              nodeName: event.target.nodeName, srcUrl: event.target.src
-            });
-          }, true);
+  (function () {
+    var maybeMedia = /^https?:\/\/.*(.mov|.mp4|.m4v|.mp3|.m4a|.m3u8)(\?.*)?$/i,
+        maybePicture = /^https?:\/\/.*(.png|.gif|.jpe?g|.svg)(\?.*)?$/i,
+        isHttp = /^https?:\/\//i,
+        port, 
+        sendMessage = typeof(safari) !== 'undefined' ?
+          function (name, obj) {safari.self.tab.dispatchMessage(name, obj);} :
+          typeof(chrome) !== 'undefined' ?
+          function (name, obj) {
+            (port = port || chrome.extension.connect({'name': name})).postMessage(obj);
+          } : null;
+
+    window.document.addEventListener('beforeload', function(event) {
+      if (event.url) {
+        if (maybeMedia.test(event.url) && event.target.parentNode.tagName !== 'OBJECT' ||
+            !maybePicture.test(event.url) && isHttp.test(event.url) && event.target.tagName === 'VIDEO') {
+          var a = window.document.createElement('a');
+          a.id = 'sendToAirFlick';
+          a.className = 'sendToAirFlick';
+          a.textContent = 'send to AirFlick!';
+          a.style.float = 'right';
+          a.style.position = 'relative';
+          a.style.marginRight = '20px';
+          a.style.webkitTransitionDuration = '0.3s';
+          a.style.zIndex = '1001';
+          a.onclick = function () {
+            var evt = window.document.createEvent('CustomEvent');
+            evt.initCustomEvent('SendToAirPlay', false, false, event.url);
+            window.document.dispatchEvent(evt);
+          };
+          event.target.parentNode.appendChild(a);
+          a.addEventListener('mouseover', function() {a.style.removeProperty('color');}, false);
+          a.addEventListener('mouseout', function() {a.style.color = 'transparent';}, false);
+          window.setTimeout(function(){try{a.style.color = 'transparent';}catch(e){};}, 5000);
+        } else if (maybePicture.test(event.url)) {
+          if (typeof(safari) !== 'undefined') {
+            event.target.addEventListener('contextmenu', function (event) {
+              safari.self.tab.setContextMenuEventUserInfo(event, {
+                nodeName: event.target.nodeName, srcUrl: event.target.src
+              });
+            }, true);
+          }
         }
       }
-    }
-  }, true);
+    }, true);
+  })();
 }
