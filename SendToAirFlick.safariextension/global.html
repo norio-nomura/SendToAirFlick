@@ -96,6 +96,9 @@ if (window.BlobBuilder && (new XMLHttpRequest()).hasOwnProperty('response')) {
           image.send(null);
         }
       };
+  handlers['SendImgToAirPlay'] = function (src, response) {
+    sendImgToAirPlay({srcUrl:src});
+  };
   if (typeof(safari) !== 'undefined') {
     safari.application.addEventListener("command", function (event) {
       sendImgToAirPlay(event.userInfo);

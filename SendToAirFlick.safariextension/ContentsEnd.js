@@ -86,4 +86,79 @@ THE SOFTWARE.
       (window.document.head || window.document.body).appendChild(script);
     }
   });
+
+  if (window.top === window) {
+    var thresholdImgSize = 300 * 200,  // From instagr.am default size, Yes, I like instagram.
+        largestImg,
+        sendImgToAirPlay = function (obj) {sendMessage('SendImgToAirPlay', obj);},
+        sendLargestImgToAirPlay = function (obj) {sendMessage('SendLargestImgToAirPlay', obj);},
+        button = window.document.createElement('a'),
+        mouseOverImg,
+        timeoutId,
+        handleMouseMove = function (mouseEvent) {
+          var currentMouseOverImg;
+          if (Array.prototype.some.call(window.document.images, function (img) {
+                if (img.naturalHeight * img.naturalWidth >= thresholdImgSize) {
+                  var rect = img.getBoundingClientRect();
+                  if (rect.left <= this.clientX && this.clientX <= rect.right &&
+                      rect.top <= this.clientY && this.clientY <= rect.bottom) {
+                    currentMouseOverImg = img;
+                    return true;
+                  }
+                }
+                return false;
+              }, mouseEvent)) {
+            if (mouseOverImg !== currentMouseOverImg) {
+              mouseOverImg = currentMouseOverImg;
+              if (button.parentNode !== mouseOverImg.offsetParent) {
+                if (button.parentNode) {
+                  button.parentNode.removeChild(button);
+                }
+                mouseOverImg.offsetParent.appendChild(button);
+              }
+              button.onclick = function (clickEvent) {
+                sendImgToAirPlay(mouseOverImg.src);
+                clickEvent.preventDefault();
+              };
+              window.setTimeout(function () {
+                button.style.opacity = '1';
+              }, 500);
+              timeoutId = window.setTimeout(function () {
+                button.style.opacity = '0';
+              }, 2000);
+            }
+            if (button.offsetParent === window.document.body) {
+              var rect = mouseOverImg.getBoundingClientRect();
+              button.style.top = rect.top.toString() + 'px';
+              button.style.left = (rect.right - button.clientWidth).toString() + 'px';
+            } else {
+              button.style.top = mouseOverImg.offsetTop.toString() + 'px';
+              button.style.left = (mouseOverImg.offsetLeft + mouseOverImg.offsetWidth - button.clientWidth).toString() + 'px';
+            }
+          } else {
+            button.style.opacity = '0';
+            mouseOverImg = null;
+          }
+        };
+    button.textContent = 'send to AirPlay!';
+    button.style.backgroundColor = 'white';
+    button.style.color = 'blue';
+    button.style.cursor = 'pointer';
+    button.style.float = 'right';
+    button.style.opacity = '0';
+    button.style.position = 'absolute';
+    button.style.webkitTransitionDuration = '0.3s';
+    button.style.zIndex = 1001;
+    window.document.addEventListener('mousemove', handleMouseMove, true);
+    button.onmouseover = function () {
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+      button.style.opacity = '1';
+    };
+    button.onmouseout = function () {
+      button.style.opacity = '0';
+    };
+  }
 })();
