@@ -87,7 +87,7 @@ THE SOFTWARE.
     }
   });
 
-  if (window.top === window) {
+  if (window.top === window && window.BlobBuilder && (new XMLHttpRequest()).hasOwnProperty('response')) {
     var thresholdImgSize = 300 * 200,  // From instagr.am default size, Yes, I like instagram.
         largestImg,
         sendImgToAirPlay = function (obj) {sendMessage('SendImgToAirPlay', obj);},
