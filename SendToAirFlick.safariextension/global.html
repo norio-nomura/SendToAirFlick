@@ -35,7 +35,7 @@ var settings = typeof(safari) !== 'undefined' ? safari.extension.settings : loca
     typeof(chrome) !== 'undefined' ? chrome.extension.getBackgroundPage : null,
     handlers = {};
 
-handlers['SendToAirPlay'] = function (src, response) {
+handlers['SendUrlToAirPlay'] = function (src, response) {
   var isHttp = /^https?:/i;
   if (settings.UseAirFlick !== 'false'||!isHttp.test(src)) {
     response(src);

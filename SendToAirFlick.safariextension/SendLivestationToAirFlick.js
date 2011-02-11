@@ -38,7 +38,7 @@ if (window.top === window) {
       button.style.zIndex = '1001';
       button.onclick = function () {
         var evt = window.document.createEvent('CustomEvent');
-        evt.initCustomEvent('SendToAirPlay', false, false, window.location.href.replace(/channels\/(\d+).*$/,'channels/$1/playlist.m3u8'));
+        evt.initCustomEvent('SendUrlToAirPlay', false, false, window.location.href.replace(/channels\/(\d+).*$/,'channels/$1/playlist.m3u8'));
         window.document.dispatchEvent(evt);
       };
       channelFlashContent.parentNode.insertBefore(button, channelFlashContent.nextSibling);

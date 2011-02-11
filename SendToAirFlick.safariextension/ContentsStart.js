@@ -52,7 +52,7 @@ if (window.top === window) {
           a.style.zIndex = '1001';
           a.onclick = function () {
             var evt = window.document.createEvent('CustomEvent');
-            evt.initCustomEvent('SendToAirPlay', false, false, event.url);
+            evt.initCustomEvent('SendUrlToAirPlay', false, false, event.url);
             window.document.dispatchEvent(evt);
           };
           event.target.parentNode.appendChild(a);

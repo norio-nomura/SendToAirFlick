@@ -42,13 +42,13 @@ THE SOFTWARE.
           }
           port.postMessage(obj);
         } : null,
-      sendToAirPlay = function (obj) {sendMessage('SendToAirPlay', obj);};
+      sendUrlToAirPlay = function (obj) {sendMessage('SendUrlToAirPlay', obj);};
   if (typeof(safari) !== 'undefined') {
     safari.self.addEventListener('message', function (eventMessage) {
       getObjectFromGlobal.call(eventMessage, eventMessage.message);
     }, false);
   }
-  window.document.addEventListener('SendToAirPlay', function (evt) {sendToAirPlay(evt.detail);}, true);
+  window.document.addEventListener('SendUrlToAirPlay', function (evt) {sendUrlToAirPlay(evt.detail);}, true);
 
   var contentScripts = window.top === window ?
       [

@@ -89,7 +89,7 @@ if (window.top === window) {
     var mediaElement = window.document.body.children[0];
     if (mediaElement.tagName === 'VIDEO' || mediaElement.tagName === 'EMBED') {
       var evt = window.document.createEvent('CustomEvent');
-      evt.initCustomEvent('SendToAirPlay', false, false, mediaElement.src);
+      evt.initCustomEvent('SendUrlToAirPlay', false, false, mediaElement.src);
       window.document.dispatchEvent(evt);
       window.document.body.removeChild(mediaElement);
     } else {
