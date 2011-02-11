@@ -54,8 +54,8 @@ THE SOFTWARE.
   var contentScripts = window.top === window ?
       [
         {
-          matcher: /^https?:\/\/www\.ustream\.tv\/(?:channel|recorded)\/.*/i,
-          file: 'sendUstreamToAirFlick.js'
+          matcher: /^https?:\/\/www\.ustream\.tv\/.*/i,
+          file: 'SendUstreamToAirFlick.js'
         },
         {
           matcher: /^https?:\/\/vimeo\.com\/.*/i,

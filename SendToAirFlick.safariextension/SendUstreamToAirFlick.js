@@ -27,7 +27,15 @@ THE SOFTWARE.
 if (window.top === window) {
   (function () {
     if (window.ustream) {
+      var iphoneStreamingUrl = null;
       if (window.ustream.vars.liveHttpUrl) {
+        iphoneStreamingUrl = window.ustream.vars.liveHttpUrl;
+      } else if (window.ustream.html5video.viewer.v2.html) {
+        var re = /^<video.*src\s*="([^"]+)".*<\/video>.*/i,
+            match = window.ustream.html5video.viewer.v2.html.match(re);
+        iphoneStreamingUrl = match ? match[1] : null;
+      }
+      if (iphoneStreamingUrl) {
         var channelFlashContent = window.document.getElementById('channelFlashContent');
         if (channelFlashContent) {
           var button = window.document.createElement('a');
@@ -40,7 +48,7 @@ if (window.top === window) {
           button.style.zIndex = '1001';
           button.onclick = function () {
             var evt = window.document.createEvent('CustomEvent');
-            evt.initCustomEvent('SendToAirPlay', false, false, window.ustream.vars.liveHttpUrl);
+            evt.initCustomEvent('SendToAirPlay', false, false, iphoneStreamingUrl);
             window.document.dispatchEvent(evt);
           };
           channelFlashContent.parentNode.parentNode.insertBefore(button, channelFlashContent.parentNode.nextSibling);
