@@ -48,7 +48,7 @@ if (window.top === window) {
           button.style.zIndex = '1001';
           button.onclick = function () {
             var evt = window.document.createEvent('CustomEvent');
-            evt.initCustomEvent('SendToAirPlay', false, false, iphoneStreamingUrl);
+            evt.initCustomEvent('SendUrlToAirPlay', false, false, iphoneStreamingUrl);
             window.document.dispatchEvent(evt);
           };
           channelFlashContent.parentNode.parentNode.insertBefore(button, channelFlashContent.parentNode.nextSibling);
