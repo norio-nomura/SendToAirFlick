@@ -94,8 +94,11 @@ THE SOFTWARE.
         sendLargestImgToAirPlay = function (obj) {sendMessage('SendLargestImgToAirPlay', obj);},
         button = window.document.createElement('a'),
         mouseOverImg,
-        timeoutId,
-        handleMouseMove = function (mouseEvent) {
+        periodicalTimerId,
+        handleMouseMove = function (argHasClientXY) {
+          if (periodicalTimerId) {
+            window.clearTimeout(periodicalTimerId);
+          }
           var currentMouseOverImg;
           if (Array.prototype.some.call(window.document.images, function (img) {
                 if (img.naturalHeight * img.naturalWidth >= thresholdImgSize) {
@@ -107,7 +110,7 @@ THE SOFTWARE.
                   }
                 }
                 return false;
-              }, mouseEvent)) {
+              }, argHasClientXY)) {
             if (mouseOverImg !== currentMouseOverImg) {
               mouseOverImg = currentMouseOverImg;
               if (button.parentNode !== mouseOverImg.offsetParent) {
@@ -122,10 +125,7 @@ THE SOFTWARE.
               };
               window.setTimeout(function () {
                 button.style.opacity = '1';
-              }, 500);
-              timeoutId = window.setTimeout(function () {
-                button.style.opacity = '0';
-              }, 2000);
+              }, 0);
             }
             if (button.offsetParent === window.document.body) {
               var rect = mouseOverImg.getBoundingClientRect();
@@ -139,7 +139,12 @@ THE SOFTWARE.
             button.style.opacity = '0';
             mouseOverImg = null;
           }
-        };
+          periodicalTimerId = window.setTimeout(handleMouseMove, 1000, {
+            clientX: argHasClientXY.clientX,
+            clientY: argHasClientXY.clientY
+          });
+        },
+        hideButtonTimeoutId;
     button.textContent = 'send to AirPlay!';
     button.style.backgroundColor = 'white';
     button.style.color = 'blue';
@@ -151,14 +156,16 @@ THE SOFTWARE.
     button.style.zIndex = 1001;
     window.document.addEventListener('mousemove', handleMouseMove, true);
     button.onmouseover = function () {
-      if (timeoutId) {
-        window.clearTimeout(timeoutId);
-        timeoutId = null;
+      if (hideButtonTimeoutId) {
+        window.clearTimeout(hideButtonTimeoutId);
+        hideButtonTimeoutId = null;
       }
       button.style.opacity = '1';
     };
     button.onmouseout = function () {
-      button.style.opacity = '0';
+      hideButtonTimeoutId = window.setTimeout(function () {
+        button.style.opacity = '0';
+      }, 2000);
     };
   }
 })();
