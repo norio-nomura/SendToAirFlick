@@ -111,13 +111,21 @@ THE SOFTWARE.
                 }
                 return false;
               }, argHasClientXY)) {
+            var offsetTop = currentMouseOverImg.offsetTop,
+                offsetLeft = currentMouseOverImg.offsetLeft,
+                offsetParent = currentMouseOverImg.offsetParent;
+            while (window.getComputedStyle(offsetParent).display !== 'block') {
+              offsetTop += offsetParent.offsetTop;
+              offsetLeft += offsetParent.offsetLeft;
+              offsetParent = offsetParent.offsetParent;
+            }
             if (mouseOverImg !== currentMouseOverImg) {
               mouseOverImg = currentMouseOverImg;
-              if (button.parentNode !== mouseOverImg.offsetParent) {
+              if (button.parentNode !== offsetParent) {
                 if (button.parentNode) {
                   button.parentNode.removeChild(button);
                 }
-                mouseOverImg.offsetParent.appendChild(button);
+                offsetParent.appendChild(button);
               }
               button.onclick = function (clickEvent) {
                 sendImgToAirPlay(mouseOverImg.src);
@@ -127,14 +135,8 @@ THE SOFTWARE.
                 button.style.opacity = '1';
               }, 0);
             }
-            if (button.offsetParent === window.document.body) {
-              var rect = mouseOverImg.getBoundingClientRect();
-              button.style.top = rect.top.toString() + 'px';
-              button.style.left = (rect.right - button.clientWidth).toString() + 'px';
-            } else {
-              button.style.top = mouseOverImg.offsetTop.toString() + 'px';
-              button.style.left = (mouseOverImg.offsetLeft + mouseOverImg.offsetWidth - button.clientWidth).toString() + 'px';
-            }
+            button.style.top = offsetTop.toString() + 'px';
+            button.style.left = (offsetLeft + mouseOverImg.offsetWidth - button.clientWidth).toString() + 'px';
           } else {
             button.style.opacity = '0';
             mouseOverImg = null;
@@ -150,9 +152,11 @@ THE SOFTWARE.
     button.style.color = 'blue';
     button.style.cursor = 'pointer';
     button.style.float = 'right';
+    button.style.fontSize = 'medium';
     button.style.opacity = '0';
     button.style.position = 'absolute';
     button.style.webkitTransitionDuration = '0.3s';
+    button.style.webkitTransitionProperty = 'opacity';
     button.style.zIndex = 1001;
     window.document.addEventListener('mousemove', handleMouseMove, true);
     button.onmouseover = function () {
