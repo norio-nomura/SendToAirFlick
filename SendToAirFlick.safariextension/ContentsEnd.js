@@ -148,13 +148,25 @@ THE SOFTWARE.
         },
         hideButtonTimeoutId;
     button.textContent = 'send to AirPlay!';
-    button.style.backgroundColor = 'white';
+    button.style.backgroundColor = 'transparent';
     button.style.color = 'blue';
     button.style.cursor = 'pointer';
     button.style.float = 'right';
     button.style.fontSize = 'medium';
     button.style.opacity = '0';
+    button.style.padding = '5px';
     button.style.position = 'absolute';
+    button.style.textDecoration = 'none';
+    button.style.textShadow = [
+      'rgba(255, 255, 255, 1) 0px 5px 5px',
+      'rgba(255, 255, 255, 1) 5px 5px 5px',
+      'rgba(255, 255, 255, 1) 5px 0px 5px',
+      'rgba(255, 255, 255, 1) 5px -5px 5px',
+      'rgba(255, 255, 255, 1) 0px -5px 5px',
+      'rgba(255, 255, 255, 1) -5px -5px 5px',
+      'rgba(255, 255, 255, 1) -5px 0px 5px',
+      'rgba(255, 255, 255, 1) -5px 5px 5px'
+    ].join(',');
     button.style.webkitTransitionDuration = '0.3s';
     button.style.webkitTransitionProperty = 'opacity';
     button.style.zIndex = 1001;
