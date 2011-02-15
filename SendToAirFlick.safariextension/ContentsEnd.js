@@ -53,12 +53,8 @@ THE SOFTWARE.
   var contentScripts = window.top === window ?
       [
         {
-          matcher: /^https?:\/\/www\.ustream\.tv\/.*/i,
-          file: 'SendUstreamToAirFlick.js'
-        },
-        {
-          matcher: /^https?:\/\/vimeo\.com\/.*/i,
-          file: 'SendVimeoToAirFlick.js'
+          matcher: /^https?:\/\/www\.facebook\.com\/.*/i,
+          file: 'SendFacebookToAirPlay.js'
         },
         {
           matcher: /^https?:\/\/www\.livestation\.com\/channels\/.*/i,
@@ -67,6 +63,14 @@ THE SOFTWARE.
         {
           matcher: /^https?:\/\/www\.livestream\.com\/.*/i,
           file: 'SendLivestreamToAirFlick.js'
+        },
+        {
+          matcher: /^https?:\/\/www\.ustream\.tv\/.*/i,
+          file: 'SendUstreamToAirFlick.js'
+        },
+        {
+          matcher: /^https?:\/\/vimeo\.com\/.*/i,
+          file: 'SendVimeoToAirFlick.js'
         }
       ] :
       [
