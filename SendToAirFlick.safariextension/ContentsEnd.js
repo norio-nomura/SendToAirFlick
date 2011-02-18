@@ -31,16 +31,16 @@ THE SOFTWARE.
           window.location = 'airflick://play-media?MediaLocation='+encodeURIComponent(message);
         }
       },
-      port, 
+      ports = {},
       sendMessage = typeof(safari) !== 'undefined' ?
         function (name, obj) {safari.self.tab.dispatchMessage(name, obj);} :
         typeof(chrome) !== 'undefined' ?
         function (name, obj) {
-          if (!port) {
-            port = chrome.extension.connect({'name': name});
-            port.onMessage.addListener(getObjectFromGlobal);
+          if (!ports[name]) {
+            ports[name] = chrome.extension.connect({'name': name});
+            ports[name].onMessage.addListener(getObjectFromGlobal);
           }
-          port.postMessage(obj);
+          ports[name].postMessage(obj);
         } : null,
       sendUrlToAirPlay = function (obj) {sendMessage('SendUrlToAirPlay', obj);};
   if (typeof(safari) !== 'undefined') {

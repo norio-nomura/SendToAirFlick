@@ -29,12 +29,12 @@ if (window.top === window) {
     var maybeMedia = /^https?:\/\/.*(.mov|.mp4|.m4v|.mp3|.m4a|.m3u8)(\?.*)?$/i,
         maybePicture = /^https?:\/\/.*(.png|.gif|.jpe?g|.svg)(\?.*)?$/i,
         isHttp = /^https?:\/\//i,
-        port, 
+        ports = {},
         sendMessage = typeof(safari) !== 'undefined' ?
           function (name, obj) {safari.self.tab.dispatchMessage(name, obj);} :
           typeof(chrome) !== 'undefined' ?
           function (name, obj) {
-            (port = port || chrome.extension.connect({'name': name})).postMessage(obj);
+            (ports[name] = ports[name] || chrome.extension.connect({'name': name})).postMessage(obj);
           } : null;
 
     window.document.addEventListener('beforeload', function(event) {
