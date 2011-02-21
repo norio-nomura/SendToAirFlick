@@ -30,9 +30,6 @@ THE SOFTWARE.
 <script type="text/javascript">
 
 var settings = typeof(safari) !== 'undefined' ? safari.extension.settings : localStorage,
-    getBackgroundPage = typeof(safari) !== 'undefined' ?
-    function () {return safari.extension.globalPage.contentWindow;} :
-    typeof(chrome) !== 'undefined' ? chrome.extension.getBackgroundPage : null,
     handlers = {};
 
 handlers['SendUrlToAirPlay'] = function (src, response) {
