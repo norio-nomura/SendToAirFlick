@@ -105,27 +105,6 @@ if (window.BlobBuilder && (new XMLHttpRequest()).hasOwnProperty('response')) {
         event.contextMenu.appendContextMenuItem("SendToAirPlay", "send image to AirPlay!");
       }
     }, true);
-  } else if (typeof(chrome) !== 'undefined') {
-    chrome.contextMenus.create({
-      'title': 'send image to AirPlay!',
-      'contexts':['image'],
-      'onclick': function (info, tab) {
-        sendImgToAirPlay(info);
-      },
-      'documentUrlPatterns':[
-        '*://*/*'
-      ],
-      'targetUrlPatterns': [
-        '*://*/*.png?*',
-        '*://*/*.gif?*',
-        '*://*/*.jpg?*',
-        '*://*/*.svg?*',
-        '*://*/*.png',
-        '*://*/*.gif',
-        '*://*/*.jpg',
-        '*://*/*.svg'
-      ]
-    }, function () {});
   }
 }
 
