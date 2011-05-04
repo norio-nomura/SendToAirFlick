@@ -62,8 +62,7 @@ if (window.top === window) {
             a.onclick = onclick;
             element.parentNode.appendChild(a);
           }
-        },
-        mvpPlayers = window.document.getElementsByClassName('mvp_player');
+        };
     window.addEventListener('beforeload', function (event) {
       if (event.target.tagName === 'EMBED') {
         createA(event.target.parentNode);
