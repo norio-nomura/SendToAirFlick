@@ -75,7 +75,7 @@ if (typeof(safari) !== 'undefined') {
   chrome.extension.onConnect.addListener(handleConnect);
 }
 
-if (window.BlobBuilder && (new XMLHttpRequest()).hasOwnProperty('response')) {
+if ((window.BlobBuilder || window.WebKitBlobBuilder) && (new XMLHttpRequest()).hasOwnProperty('response')) {
   var lastSendPhotoUrl,
       sendImgToAirPlay = function (info) {
         if (lastSendPhotoUrl !== info.srcUrl) {
@@ -83,7 +83,7 @@ if (window.BlobBuilder && (new XMLHttpRequest()).hasOwnProperty('response')) {
           image.open('GET', info.srcUrl, true);
           image.responseType = 'arraybuffer';
           image.onload = function () {
-            var bb = new BlobBuilder(),
+            var bb = new (window.BlobBuilder || window.WebKitBlobBuilder)(),
                 xhr = new XMLHttpRequest();
             if (secureSettings.PasswordOfAppleTV) {
               xhr.open('PUT', 'http://' + settings.NameOfAppleTV + ':7000/photo', true, 'AirPlay', secureSettings.PasswordOfAppleTV);
