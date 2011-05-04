@@ -26,5 +26,6 @@ THE SOFTWARE.
 
 var options = {
   'UseAirFlick': false,
-  'NameOfAppleTV': 'appletv.local.'
+  'NameOfAppleTV': 'appletv.local.',
+  'PasswordOfAppleTV': ''
 };

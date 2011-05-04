@@ -30,6 +30,7 @@ THE SOFTWARE.
 <script type="text/javascript">
 
 var settings = typeof(safari) !== 'undefined' ? safari.extension.settings : localStorage,
+    secureSettings = typeof(safari) !== 'undefined' ? safari.extension.secureSettings : localStorage,
     handlers = {};
 
 handlers['SendUrlToAirPlay'] = function (src, response) {
@@ -38,7 +39,11 @@ handlers['SendUrlToAirPlay'] = function (src, response) {
     response(src);
   } else {
     var xhr = new XMLHttpRequest;
-    xhr.open('POST', 'http://' + settings.NameOfAppleTV + ':7000/play');
+    if (secureSettings.PasswordOfAppleTV) {
+      xhr.open('POST', 'http://' + settings.NameOfAppleTV + ':7000/play', true, 'AirPlay', secureSettings.PasswordOfAppleTV);
+    } else {
+      xhr.open('POST', 'http://' + settings.NameOfAppleTV + ':7000/play');
+    }
     xhr.send('Content-Location: ' + src + '\nStart-Position: 0.0000\n');
   }
 };
@@ -80,7 +85,11 @@ if (window.BlobBuilder && (new XMLHttpRequest()).hasOwnProperty('response')) {
           image.onload = function () {
             var bb = new BlobBuilder(),
                 xhr = new XMLHttpRequest();
-            xhr.open('PUT', 'http://' + settings.NameOfAppleTV + ':7000/photo');
+            if (secureSettings.PasswordOfAppleTV) {
+              xhr.open('PUT', 'http://' + settings.NameOfAppleTV + ':7000/photo', true, 'AirPlay', secureSettings.PasswordOfAppleTV);
+            } else {
+              xhr.open('PUT', 'http://' + settings.NameOfAppleTV + ':7000/photo');
+            }
             xhr.setRequestHeader('X-Apple-Transition', 'Dissolve');  // Dissolve(Default) or SlideLeft
             xhr.onload = function () {
               lastSendPhotoUrl = info.srcUrl;
