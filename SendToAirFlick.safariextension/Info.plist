@@ -4,6 +4,8 @@
 <dict>
 	<key>Author</key>
 	<string>Norio Nomura</string>
+	<key>Builder Version</key>
+	<string>7536.6.1</string>
 	<key>CFBundleDisplayName</key>
 	<string>SendToAirFlick</string>
 	<key>CFBundleIdentifier</key>
@@ -11,9 +13,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.9</string>
+	<string>1.10</string>
 	<key>CFBundleVersion</key>
-	<string>1.9</string>
+	<string>1.10</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
