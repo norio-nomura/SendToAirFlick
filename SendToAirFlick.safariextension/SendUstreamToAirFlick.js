@@ -2,7 +2,7 @@
 
 The MIT License
 
-Copyright (c) 2011 Norio Nomura
+Copyright (c) 2012 Norio Nomura
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the 'Software'), to deal
@@ -30,10 +30,12 @@ if (window.top === window) {
       var iphoneStreamingUrl = null;
       if (window.ustream.vars.liveHttpUrl) {
         iphoneStreamingUrl = window.ustream.vars.liveHttpUrl;
-      } else if (window.ustream.html5video.viewer.v2.html) {
+      } else if (window.ustream.html5video && window.ustream.html5video.viewer && window.ustream.html5video.viewer.v2 && window.ustream.html5video.viewer.v2.html) {
         var re = /^<video.*src\s*="([^"]+)".*<\/video>.*/i,
             match = window.ustream.html5video.viewer.v2.html.match(re);
         iphoneStreamingUrl = match ? match[1] : null;
+      } else if (window.ustream.vars.channelId) {
+        iphoneStreamingUrl = 'http://iphone-streaming.ustream.tv/uhls/' + window.ustream.vars.channelId + '/streams/live/iphone/playlist.m3u8'
       }
       if (iphoneStreamingUrl) {
         var channelFlashContent = window.document.getElementById('channelFlashContent');
